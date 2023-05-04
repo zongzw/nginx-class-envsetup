@@ -1,0 +1,27 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: centos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centos
+  template:
+    metadata:
+      labels:
+        app: centos
+    spec:
+      containers:
+        - name: centos
+          image: centos:7
+          command: ["/bin/bash", "-c"]
+          args:
+            - while true; do sleep 10; done
+
+# $ kubectl apply -f client.yaml
+# $ kubectl exec -it deploy/client -- bash

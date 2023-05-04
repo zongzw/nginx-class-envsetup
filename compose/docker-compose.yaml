@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  client:
+    image: centos:7
+    container_name: client
+    entrypoint:
+      - sh
+      - -c
+      - "while true; do sleep 1; done"
+    networks:
+      - client-net
+
+  backend-server-1:
+    image: nginx:latest
+    container_name: backend-server-1
+    networks:
+      - client-net
+
+  backend-server-2:
+    image: nginx:latest
+    container_name: backend-server-2
+    networks:
+      - server-net
+
+  backend-server-3:
+    image: nginx:latest
+    container_name: backend-server-3
+    networks:
+      - server-net
+
+  nginx:
+    # 修改此处，切换nginx image或者版本
+    image: nginx:1.21.1
+    container_name: nginx-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - client-net
+      - server-net
+
+networks:
+  client-net:
+  server-net:
